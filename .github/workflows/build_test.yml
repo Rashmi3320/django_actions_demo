@@ -8,17 +8,22 @@ on:
     branches: [main]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+
+  pre-test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python: [2.7, 3.6, 3.8]
+    runs-on:  ${{ matrix.os }}
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Install Dependencies
       run: |
-        python3 -m pip install --upgrade pip
+        python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Run Tests
+    - name: tests
       run: |
         cd myapp
         python3 manage.py test
